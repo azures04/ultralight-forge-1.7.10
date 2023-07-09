@@ -1,0 +1,70 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            name = "forge"
+            url = "http://maven.minecraftforge.net/"
+        }
+        maven {
+            name = "sonatype-sna"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+        maven {
+            name = "sonatype-rel"
+            url = "https://oss.sonatype.org/content/repositories/releases/"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+    }
+}
+
+apply plugin: 'forge'
+
+version = "0.0.1"
+group= "fr.bobsonic.examplemdk"
+archivesBaseName = "ExampleMDK"
+compileJava.options.encoding = 'UTF-8'
+sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
+
+minecraft {
+    version = "1.7.10-10.13.4.1614-1.7.10"
+    runDir = "run"
+}
+
+repositories {
+	jcenter()
+}
+
+processResources {
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+        expand 'version':project.version, 'mcversion':project.minecraft.version
+    }
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
+
+/*shadowJar {
+    manifest {
+        attributes(
+                "FMLCorePlugin": "keystrokesmod.client.tweaker.FMLLoadingPlugin",
+                "ForceLoadAsMod": true,
+                FMLCorePluginContainsFMLMod: true,
+                "ModSide": "CLIENT"
+        )
+    }
+}*/
+
+dependencies {
+    implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
+
+
+    //ultralight
+    compile "com.labymedia:ultralight-java-base:0.4.12"
+    compile "com.labymedia:ultralight-java-databind:0.4.12"
+    compile "com.labymedia:ultralight-java-gpu:0.4.12"
+}
